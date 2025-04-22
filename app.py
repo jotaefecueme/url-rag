@@ -8,6 +8,7 @@ from langchain_core.documents import Document
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.vectorstores import InMemoryVectorStore
+import time
 
 load_dotenv()
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
@@ -52,8 +53,8 @@ def generate_answer(question: str, docs: List[Document], custom_prompt: str) -> 
 st.title("RAG por URL")
 
 st.sidebar.header("Fragmentación de Documentos")
-chunk_size = st.sidebar.slider("Tamaño de fragmento", 100, 3000, 1000, step=100)
-chunk_overlap = st.sidebar.slider("Solapamiento", 0, 500, 100, step=50)
+chunk_size = st.sidebar.slider("Tamaño de fragmento", 100, 10000, 1000, step=100)
+chunk_overlap = st.sidebar.slider("Solapamiento", 0, 1000, 100, step=50)
 
 st.sidebar.header("Parámetros de Búsqueda")
 k = st.sidebar.number_input("Número de resultados (k)", min_value=1, max_value=20, value=5)
@@ -95,7 +96,11 @@ if question:
         for i, doc in enumerate(docs, 1):
             with st.expander(f"Fragmento {i}"):
                 st.write(doc.page_content)
-        with st.spinner("Generando respuesta..."):
+         with st.spinner("Generando respuesta..."):
+            start_time = time.time()  # ⬅️ Inicio del temporizador
             answer = generate_answer(question, docs, custom_prompt)
+            elapsed_time = time.time() - start_time  # ⬅️ Fin del temporizador
+
         st.subheader("Respuesta")
         st.write(answer)
+        st.caption(f"⏱️ Tiempo de respuesta: {elapsed_time:.2f} segundos") 
