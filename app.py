@@ -96,11 +96,13 @@ if question:
         for i, doc in enumerate(docs, 1):
             with st.expander(f"Fragmento {i}"):
                 st.write(doc.page_content)
-         with st.spinner("Generando respuesta..."):
-            start_time = time.time()  # ⬅️ Inicio del temporizador
+        
+        with st.spinner("Generando respuesta..."):
+            start_time = time.time()  
             answer = generate_answer(question, docs, custom_prompt)
-            elapsed_time = time.time() - start_time  # ⬅️ Fin del temporizador
+            elapsed_time = time.time() - start_time 
 
         st.subheader("Respuesta")
         st.write(answer)
-        st.caption(f"⏱️ Tiempo de respuesta: {elapsed_time:.2f} segundos") 
+        st.caption(f"⏱️ Tiempo de respuesta: {elapsed_time:.2f} segundos")
+
